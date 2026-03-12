@@ -1,5 +1,33 @@
 const fs = require("fs");
 
+const DELIVERY_START = 8 * 3600; 
+const DELIVERY_END = 22 * 3600;  
+
+function parseAmPmToSec(t){
+    let [time, period] = t.trim().split(' ');
+    let [h, m, s] = time.split(':').map(Number);
+
+    if (period === 'am') {
+        if (h === 12) h = 0;
+    } else {
+        if (h !== 12) h += 12;
+    }
+
+    return h * 3600 + m * 60 + s;
+}
+
+function durationToSec(t){
+    let [h,m,s] = t.split(":").map(Number);
+    return h*3600 + m*60 + s;
+}
+
+function secToDuration(sec){
+    let h = Math.floor(sec/3600);
+    let m = Math.floor((sec%3600)/60);
+    let s = sec%60;
+
+    return h + ':' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+}
 // ============================================================
 // Function 1: getShiftDuration(startTime, endTime)
 // startTime: (typeof string) formatted as hh:mm:ss am or hh:mm:ss pm
